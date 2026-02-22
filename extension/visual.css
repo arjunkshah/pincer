@@ -90,6 +90,17 @@ html[data-pincer-highlight-actions] a[href]:not([data-pincer-ignore]) {
   text-decoration-thickness: 2px !important;
 }
 
+/* Heading boost */
+html[data-pincer-heading-boost] h1,
+html[data-pincer-heading-boost] h2,
+html[data-pincer-heading-boost] h3,
+html[data-pincer-heading-boost] h4 {
+  font-weight: 700 !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 4px !important;
+}
+
 /* Color presets */
 html[data-pincer-color="paper"],
 html[data-pincer-color="paper"] body {
