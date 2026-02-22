@@ -2,6 +2,8 @@
 
 Pincer is an accessibility-first Chrome extension that makes the web easier to read for dyslexic, neurodivergent, and disabled people. This repo contains the extension and a minimal landing page.
 
+Highlights include AI rewrite, focus mode, calm mode, reading ruler, dyslexia-friendly fonts, contrast controls, and keyboard-friendly navigation.
+
 ## Structure
 
 - `extension/` — Chrome extension source
