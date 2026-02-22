@@ -1,1 +1,237 @@
-(()=>{"use strict";const e="https://trypincer.netlify.app/.netlify/functions/groq-proxy",t="llama-3.1-8b-instant",n=new Map;async function o(n,o,s){const r=function(e){const t={plain:"Write in plain language. Use common words. Keep sentences short.",grade5:"Write at a 5th grade reading level. Use simple vocabulary. Avoid complex sentence structures.",bullets:"Focus on the bullet_version field. Break all information into clear, short bullet points.",steps:"Focus on the step_version field. Convert all instructions into numbered steps.",literal:"Write in literal_version. Avoid all metaphors, idioms, and figurative language. Be completely literal and direct.",actions:"Focus on actions_detected. List only the specific actions the user needs to take. Ignore background information."};return`You are Pincer, an AI accessibility assistant. Your job is to rewrite web page text to be more accessible.\n\nRules:\n- Use short sentences (max 15 words each).\n- Avoid jargon, technical terms, and idioms.\n- Preserve all factual meaning — never invent new facts.\n- Tone must be neutral, calm, and supportive.\n- Return ONLY a JSON object with the following keys:\n  {\n    "simplified_text": "...",\n    "bullet_version": ["...", "..."],\n    "step_version": ["Step 1: ...", "Step 2: ..."],\n    "literal_version": "...",\n    "actions_detected": ["...", "..."],\n    "deadlines_detected": ["..."]\n  }\n\nMode: ${t[e]||t.plain}`}(o),i=`Rewrite the following web page text according to your instructions. Return ONLY valid JSON.\n\nTEXT:\n${n}`,a=await fetch(e,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:t,messages:[{role:"system",content:r},{role:"user",content:i}],temperature:.3,response_format:{type:"json_object"}})});if(!a.ok){const e=await a.text();throw new Error(`Groq API error ${a.status}: ${e}`)}const c=await a.json(),l=c.choices?.[0]?.message?.content||"{}";try{return JSON.parse(l)}catch{return{simplified_text:l}}}chrome.runtime.onMessage.addListener((s,r,i)=>"AI_REWRITE"===s.type?(async function(e,t){try{const{text:s,mode:r}=e;const c=`${s.slice(0,80)}::${r}`,l=n.get(c);if(l&&Date.now()-l.ts<6e5)return void t({data:l.data});const p=function(e,t){if(e.length<=t)return[e];const n=[];let o=0;for(;o<e.length;){let s=o+t;if(s<e.length){const t=e.lastIndexOf(".",s);t>o+1500&&(s=t+1)}n.push(e.slice(o,s).trim()),o=s}return n}(s,3e3),d=[];for(const e of p){const t=await o(e,r);d.push(t)}const u=function(e){return 1===e.length?e[0]:{simplified_text:e.map(e=>e.simplified_text||"").join("\n\n"),bullet_version:e.flatMap(e=>e.bullet_version||[]),step_version:e.flatMap(e=>e.step_version||[]),literal_version:e.map(e=>e.literal_version||"").join("\n\n"),actions_detected:e.flatMap(e=>e.actions_detected||[]),deadlines_detected:e.flatMap(e=>e.deadlines_detected||[])}}(d);n.set(c,{data:u,ts:Date.now()}),t({data:u})}catch(e){console.error("[Pincer] AI rewrite error:",e),t({error:e.message})}}(s,i),!0):"CALM_REWRITE"===s.type?(async function(n,o){try{const{texts:s}=n;if(!s||0===s.length)return void o({replacements:[]});const a='You are Pincer Calm Mode. Your job is to rewrite anxiety-inducing, aggressive, or urgent-sounding text into calm, neutral language.\n\nRules:\n- Keep the same factual meaning.\n- Remove urgency, threats, and aggressive tone.\n- Use simple, reassuring language.\n- Return ONLY a JSON object: { "replacements": [{ "original": "...", "calm": "..." }, ...] }',c=`Rewrite these alert/notice texts to be calm and neutral:\n${JSON.stringify(s)}`,l=await fetch(e,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:t,messages:[{role:"system",content:a},{role:"user",content:c}],temperature:.3,response_format:{type:"json_object"}})});if(!l.ok)return void o({replacements:[]});const p=await l.json(),d=p.choices?.[0]?.message?.content||"{}";o({replacements:JSON.parse(d).replacements||[]})}catch(e){console.error("[Pincer] Calm rewrite error:",e),o({replacements:[]})}}(s,i),!0):"AI_TOOLTIP"===s.type?(async function(n,o){try{const{elementHtml:s}=n;const a=await fetch(e,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:t,messages:[{role:"system",content:"Describe what this HTML element does in one short, plain sentence. Be literal. Max 15 words."},{role:"user",content:s}],temperature:.2,max_tokens:60})}),c=await a.json();o({text:c.choices?.[0]?.message?.content?.trim()||null})}catch{o({text:null})}}(s,i),!0):void 0)})();
+const GROQ_API_BASE = "https://api.groq.com/openai/v1";
+const MODEL = "llama-3.1-8b-instant";
+const cache = new Map();
+const CACHE_TTL_MS = 10 * 60 * 1000;
+
+function buildSystemPrompt(mode) {
+  const modes = {
+    plain: "Write in plain language. Use common words. Keep sentences short.",
+    grade5: "Write at a 5th grade reading level. Use simple vocabulary. Avoid complex sentence structures.",
+    bullets: "Focus on the bullet_version field. Break all information into clear, short bullet points.",
+    steps: "Focus on the step_version field. Convert all instructions into numbered steps.",
+    literal: "Write in literal_version. Avoid all metaphors, idioms, and figurative language. Be completely literal and direct.",
+    actions: "Focus on actions_detected. List only the specific actions the user needs to take. Ignore background information."
+  };
+
+  return `You are Pincer, an AI accessibility assistant. Your job is to rewrite web page text to be more accessible.
+
+Rules:
+- Use short sentences (max 15 words each).
+- Avoid jargon, technical terms, and idioms.
+- Preserve all factual meaning — never invent new facts.
+- Tone must be neutral, calm, and supportive.
+- Return ONLY a JSON object with the following keys:
+  {
+    "simplified_text": "...",
+    "bullet_version": ["...", "..."],
+    "step_version": ["Step 1: ...", "Step 2: ..."],
+    "literal_version": "...",
+    "actions_detected": ["...", "..."],
+    "deadlines_detected": ["..."]
+  }
+
+Mode: ${modes[mode] || modes.plain}`;
+}
+
+function splitText(text, limit) {
+  if (text.length <= limit) return [text];
+  const chunks = [];
+  let idx = 0;
+  while (idx < text.length) {
+    let end = idx + limit;
+    if (end < text.length) {
+      const lastPeriod = text.lastIndexOf(".", end);
+      if (lastPeriod > idx + 1500) end = lastPeriod + 1;
+    }
+    chunks.push(text.slice(idx, end).trim());
+    idx = end;
+  }
+  return chunks;
+}
+
+function mergeChunks(results) {
+  if (results.length === 1) return results[0];
+  return {
+    simplified_text: results.map((r) => r.simplified_text || "").join("\n\n"),
+    bullet_version: results.flatMap((r) => r.bullet_version || []),
+    step_version: results.flatMap((r) => r.step_version || []),
+    literal_version: results.map((r) => r.literal_version || "").join("\n\n"),
+    actions_detected: results.flatMap((r) => r.actions_detected || []),
+    deadlines_detected: results.flatMap((r) => r.deadlines_detected || [])
+  };
+}
+
+async function getApiKey(prefs) {
+  if (prefs && prefs.openaiApiKey) return prefs.openaiApiKey;
+  return new Promise((resolve) => {
+    chrome.storage.local.get("pincerPrefs", (res) => {
+      resolve(res.pincerPrefs?.openaiApiKey || "");
+    });
+  });
+}
+
+async function callGroq(text, mode, apiKey) {
+  const systemPrompt = buildSystemPrompt(mode);
+  const userPrompt = `Rewrite the following web page text according to your instructions. Return ONLY valid JSON.\n\nTEXT:\n${text}`;
+
+  const response = await fetch(`${GROQ_API_BASE}/chat/completions`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      model: MODEL,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ],
+      temperature: 0.3,
+      response_format: { type: "json_object" }
+    })
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Groq API error ${response.status}: ${text}`);
+  }
+
+  const json = await response.json();
+  const content = json.choices?.[0]?.message?.content || "{}";
+  try {
+    return JSON.parse(content);
+  } catch {
+    return { simplified_text: content };
+  }
+}
+
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.runtime.openOptionsPage();
+});
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "AI_REWRITE") {
+    (async () => {
+      try {
+        const apiKey = await getApiKey(message.prefs);
+        if (!apiKey) {
+          sendResponse({ error: "No API key configured." });
+          return;
+        }
+
+        const cacheKey = `${message.text.slice(0, 80)}::${message.mode}`;
+        const cached = cache.get(cacheKey);
+        if (cached && Date.now() - cached.ts < CACHE_TTL_MS) {
+          sendResponse({ data: cached.data });
+          return;
+        }
+
+        const chunks = splitText(message.text, 3000);
+        const results = [];
+        for (const chunk of chunks) {
+          const data = await callGroq(chunk, message.mode, apiKey);
+          results.push(data);
+        }
+
+        const merged = mergeChunks(results);
+        cache.set(cacheKey, { data: merged, ts: Date.now() });
+        sendResponse({ data: merged });
+      } catch (error) {
+        console.error("[Pincer] AI rewrite error:", error);
+        sendResponse({ error: error.message });
+      }
+    })();
+    return true;
+  }
+
+  if (message.type === "CALM_REWRITE") {
+    (async () => {
+      try {
+        if (!message.texts || message.texts.length === 0) {
+          sendResponse({ replacements: [] });
+          return;
+        }
+
+        const apiKey = await getApiKey(message.prefs);
+        if (!apiKey) {
+          sendResponse({ replacements: [] });
+          return;
+        }
+
+        const systemPrompt = "You are Pincer Calm Mode. Your job is to rewrite anxiety-inducing, aggressive, or urgent-sounding text into calm, neutral language.\n\nRules:\n- Keep the same factual meaning.\n- Remove urgency, threats, and aggressive tone.\n- Use simple, reassuring language.\n- Return ONLY a JSON object: { \"replacements\": [{ \"original\": \"...\", \"calm\": \"...\" }, ...] }";
+        const userPrompt = `Rewrite these alert/notice texts to be calm and neutral:\n${JSON.stringify(message.texts)}`;
+
+        const response = await fetch(`${GROQ_API_BASE}/chat/completions`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: MODEL,
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: userPrompt }
+            ],
+            temperature: 0.3,
+            response_format: { type: "json_object" }
+          })
+        });
+
+        if (!response.ok) {
+          sendResponse({ replacements: [] });
+          return;
+        }
+
+        const json = await response.json();
+        const content = json.choices?.[0]?.message?.content || "{}";
+        const data = JSON.parse(content);
+        sendResponse({ replacements: data.replacements || [] });
+      } catch (error) {
+        console.error("[Pincer] Calm rewrite error:", error);
+        sendResponse({ replacements: [] });
+      }
+    })();
+    return true;
+  }
+
+  if (message.type === "AI_TOOLTIP") {
+    (async () => {
+      try {
+        const apiKey = await getApiKey(message.prefs);
+        if (!apiKey) {
+          sendResponse({ text: null });
+          return;
+        }
+
+        const response = await fetch(`${GROQ_API_BASE}/chat/completions`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: MODEL,
+            messages: [
+              {
+                role: "system",
+                content: "Describe what this HTML element does in one short, plain sentence. Be literal. Max 15 words."
+              },
+              { role: "user", content: message.elementHtml }
+            ],
+            temperature: 0.2,
+            max_tokens: 60
+          })
+        });
+
+        const json = await response.json();
+        sendResponse({ text: json.choices?.[0]?.message?.content?.trim() || null });
+      } catch {
+        sendResponse({ text: null });
+      }
+    })();
+    return true;
+  }
+
+  return false;
+});

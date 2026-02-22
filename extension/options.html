@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pincer Setup</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="header">
+      <div class="logo">PINCER</div>
+      <p class="sub">Set up your AI key and confirm the terms.</p>
+    </header>
+
+    <section class="card">
+      <h1>Connect Groq</h1>
+      <p>Add your Groq API key to enable AI rewrite, calm mode, and tooltips.</p>
+
+      <label class="field">
+        <span>Groq API key</span>
+        <input id="apiKey" type="password" placeholder="gsk_..." autocomplete="off" />
+      </label>
+
+      <label class="checkbox">
+        <input id="terms" type="checkbox" />
+        <span>I understand my key is stored locally in this browser.</span>
+      </label>
+
+      <label class="checkbox">
+        <input id="privacy" type="checkbox" />
+        <span>I agree to Pincer’s usage guidelines and privacy terms.</span>
+      </label>
+
+      <button id="save" class="btn" disabled>Save & Continue</button>
+      <p id="status" class="status" aria-live="polite"></p>
+    </section>
+
+    <section class="card muted">
+      <h2>Need a key?</h2>
+      <p>Create one in your Groq console, then paste it here.</p>
+      <a class="link" href="https://console.groq.com/keys" target="_blank" rel="noreferrer">Open Groq Keys</a>
+    </section>
+  </main>
+
+  <script src="options.js"></script>
+</body>
+</html>
