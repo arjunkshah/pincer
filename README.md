@@ -20,6 +20,21 @@ Deploy with Surge:
 surge site pincer.surge.sh
 ```
 
+## Netlify proxy (recommended)
+
+Chrome extensions cannot keep API keys secret. Use a Netlify function as a proxy:
+
+1. Create a Netlify site from this repo.
+2. Set an environment variable `GROQ_API_KEY` in Netlify.
+3. Update `extension/background.js` to point to your Netlify URL:
+   `https://YOUR-NETLIFY-SITE.netlify.app/.netlify/functions/groq-proxy`
+4. Rebuild the zip:
+
+```
+cd extension
+zip -r ../site/pincer-extension.zip .
+```
+
 ## Extension
 
 Load unpacked:
