@@ -112,6 +112,28 @@ p {
   text-decoration: underline;
 }
 
+.inline-link {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.inline-link:hover {
+  text-decoration: underline;
+}
+
+.legal ol {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.contact {
+  margin-top: 10px;
+  font-size: 12px;
+}
+
 .status {
   font-size: 12px;
   color: var(--muted);

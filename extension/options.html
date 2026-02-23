@@ -24,12 +24,12 @@
 
       <label class="checkbox">
         <input id="terms" type="checkbox" />
-        <span>I understand my key is stored locally in this browser.</span>
+        <span>I agree to the <a class="inline-link" href="#terms">Terms of Use</a>.</span>
       </label>
 
       <label class="checkbox">
         <input id="privacy" type="checkbox" />
-        <span>I agree to Pincer’s usage guidelines and privacy terms.</span>
+        <span>I agree to the <a class="inline-link" href="#privacy">Privacy Policy</a>.</span>
       </label>
 
       <button id="save" class="btn" disabled>Save & Continue</button>
@@ -40,6 +40,31 @@
       <h2>Need a key?</h2>
       <p>Create one in your Groq console, then paste it here.</p>
       <a class="link" href="https://console.groq.com/keys" target="_blank" rel="noreferrer">Open Groq Keys</a>
+    </section>
+
+    <section class="card legal" id="terms">
+      <h2>Terms of Use</h2>
+      <ol>
+        <li>You will use Pincer lawfully and not to abuse, disrupt, or overload the service.</li>
+        <li>You are responsible for any API key you provide and any usage or costs tied to it.</li>
+        <li>Pincer is provided “as is” without warranties; results may be incomplete or inaccurate.</li>
+        <li>You should verify important information independently.</li>
+        <li>You will not use Pincer to generate harmful, illegal, or deceptive content.</li>
+        <li>We may update these terms from time to time; continued use means you accept the changes.</li>
+      </ol>
+    </section>
+
+    <section class="card legal" id="privacy">
+      <h2>Privacy Policy</h2>
+      <ol>
+        <li>Pincer runs locally in your browser and stores settings (including your API key) in local browser storage.</li>
+        <li>We do not sell or share personal data.</li>
+        <li>When AI features are used, selected page text is sent to Groq’s API to generate responses.</li>
+        <li>Your API key is used only to authenticate those requests and is not sent to our servers.</li>
+        <li>We do not retain or log the text you process in Pincer.</li>
+        <li>You can delete your data by clearing the extension’s local storage or removing the extension.</li>
+      </ol>
+      <p class="contact">Contact: <a class="inline-link" href="mailto:arjunkshah21@gmail.com">arjunkshah21@gmail.com</a></p>
     </section>
   </main>
 
