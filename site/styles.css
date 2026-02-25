@@ -878,7 +878,8 @@
 
 .blog-list {
   display: grid;
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .blog-item {
@@ -886,6 +887,26 @@
   border-radius: 14px;
   padding: 16px;
   background: #fff;
+}
+
+.blog-item h3,
+.blog-feature h3 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.blog-meta {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 10px;
+}
+
+.blog-feature {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  background: #fff;
+  margin-bottom: 16px;
 }
 
 @keyframes fadeLeft {
@@ -920,6 +941,7 @@
   .pricing,
   .team,
   .contact-grid,
+  .blog-list,
   .footer-grid {
     grid-template-columns: 1fr;
   }
