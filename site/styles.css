@@ -389,13 +389,9 @@
 
     .section-title,
     .section-sub {
-      opacity: 0;
-      transform: translateY(12px);
-      animation: fadeUp 0.6s ease forwards;
-    }
-
-    .section-sub {
-      animation-delay: 0.08s;
+      opacity: 1;
+      transform: none;
+      animation: none;
     }
 
     .video-shell {
@@ -486,9 +482,9 @@
     .bento-card,
     .video-shell,
     .faq-item {
-      opacity: 0;
-      transform: translateY(12px);
-      animation: fadeUp 0.6s ease forwards;
+      opacity: 1;
+      transform: none;
+      animation: none;
     }
 
     .grid-3 .card:nth-child(1),
@@ -689,7 +685,9 @@
   .video-shell,
   .faq-item,
   .float-slow,
-  .pulse::after {
+  .pulse::after,
+  .typewriter::after,
+  .reveal {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
@@ -700,22 +698,12 @@
   background: #fbfbfb;
 }
 
-.fade-left {
-  opacity: 0;
-  transform: translateX(-16px);
-  animation: fadeLeft 0.7s ease forwards;
-}
-
-.fade-right {
-  opacity: 0;
-  transform: translateX(16px);
-  animation: fadeRight 0.7s ease forwards;
-}
-
+.fade-left,
+.fade-right,
 .fade-scale {
-  opacity: 0;
-  transform: scale(0.96);
-  animation: fadeScale 0.7s ease forwards;
+  opacity: 1;
+  transform: none;
+  animation: none;
 }
 
 .float {
@@ -743,7 +731,62 @@
 }
 
 .stagger > * {
-  animation-delay: calc(var(--i, 1) * 0.08s);
+  transition-delay: calc(var(--i, 1) * 0.08s);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.fade-left {
+  transform: translateX(-18px);
+}
+
+.reveal.fade-right {
+  transform: translateX(18px);
+}
+
+.reveal.fade-scale {
+  transform: scale(0.96);
+}
+
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal.fade-left.in-view,
+.reveal.fade-right.in-view {
+  transform: translateX(0);
+}
+
+.reveal.fade-scale.in-view {
+  transform: scale(1);
+}
+
+.typewriter {
+  display: inline-block;
+  position: relative;
+  padding-right: 8px;
+  white-space: nowrap;
+}
+
+.typewriter::after {
+  content: \"\";
+  position: absolute;
+  right: 2px;
+  top: 0.2em;
+  width: 1px;
+  height: 1em;
+  background: var(--accent);
+  animation: caretBlink 0.9s steps(2) infinite;
+}
+
+.typewriter.typewriter-done::after {
+  animation: none;
+  opacity: 0.4;
 }
 
 .metrics {
@@ -927,6 +970,12 @@
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
+}
+
+@keyframes caretBlink {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 @keyframes pulseGlow {
