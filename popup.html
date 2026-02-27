@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pincer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 340px;
+      min-height: 480px;
+      font-family: 'JetBrains Mono', 'IBM Plex Mono', Consolas, monospace;
+      background: #ffffff;
+      color: #111111;
+      overflow-x: hidden;
+    }
+    .ai-hidden {
+      display: none !important;
+    }
+  </style>
+  <script defer src="popup.js"></script>
+  <link href="popup.css" rel="stylesheet" />
+</head>
+<body>
+  <div id="root"></div>
+  <script defer>
+    (function () {
+      function stripAiUi() {
+        document.querySelectorAll(".ai-bar, .api-key-row").forEach((el) => el.classList.add("ai-hidden"));
+        document.querySelectorAll(".section").forEach((section) => {
+          const header = section.querySelector(".section-header");
+          if (!header) return;
+          const title = header.textContent.trim();
+          if (title === "Cognitive" || title === "Settings") {
+            section.classList.add("ai-hidden");
+          }
+        });
+        document.querySelectorAll(".toggle-label").forEach((label) => {
+          const text = label.textContent.trim();
+          if (text === "Simplify Text (AI)" || text === "Calm Mode") {
+            const row = label.closest(".toggle-row");
+            if (row) row.classList.add("ai-hidden");
+          }
+        });
+        document.querySelectorAll(".mode-row-label").forEach((label) => {
+          if (label.textContent.trim() === "Rewrite Mode") {
+            const row = label.closest(".mode-row");
+            if (row) row.classList.add("ai-hidden");
+          }
+        });
+      }
+
+      const observer = new MutationObserver(stripAiUi);
+      observer.observe(document.body, { childList: true, subtree: true });
+      stripAiUi();
+      setTimeout(() => observer.disconnect(), 2000);
+    })();
+  </script>
+</body>
+</html>
