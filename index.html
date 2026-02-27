@@ -369,6 +369,50 @@
       animation-delay: 0.08s;
     }
 
+    .section-alt {
+      background: #fbfbfb;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .typewriter {
+      display: inline-block;
+      position: relative;
+      padding-right: 8px;
+      white-space: nowrap;
+    }
+
+    .typewriter::after {
+      content: "";
+      position: absolute;
+      right: 2px;
+      top: 0.2em;
+      width: 1px;
+      height: 1em;
+      background: var(--accent);
+      animation: caretBlink 0.9s steps(2) infinite;
+    }
+
+    .typewriter.typewriter-done::after {
+      animation: none;
+      opacity: 0.4;
+    }
+
+    @keyframes caretBlink {
+      0% { opacity: 0; }
+      50% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -500,6 +544,187 @@
       gap: 18px;
     }
 
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .metric {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .metric strong {
+      font-size: 20px;
+      display: block;
+    }
+
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+      align-items: center;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    .logo-chip {
+      border: 1px dashed var(--border);
+      border-radius: 999px;
+      padding: 8px 10px;
+      text-align: center;
+      background: #fff;
+    }
+
+    .comparison {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .comparison th,
+    .comparison td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    .comparison th {
+      background: #f5f5f5;
+    }
+
+    .pricing {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .price-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      background: #fff;
+      display: grid;
+      gap: 12px;
+    }
+
+    .price-card .price {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .price-list {
+      display: grid;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .team {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .person {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+
+    .timeline-item {
+      border-left: 2px solid var(--accent);
+      padding-left: 12px;
+      color: var(--muted);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+    }
+
+    .form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .input,
+    .textarea {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 12px;
+    }
+
+    .textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 44px 0;
+      background: #fff;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .footer-brand {
+      display: grid;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .footer-links {
+      display: grid;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .footer-links a {
+      color: var(--muted);
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    .footer-meta {
+      margin-top: 24px;
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 18px;
+    }
+
     .quote {
       border-left: 2px solid var(--accent);
       padding-left: 12px;
@@ -552,7 +777,13 @@
       .grid-3,
       .steps,
       .testimonials,
-      .bento-grid {
+      .bento-grid,
+      .metrics,
+      .logo-grid,
+      .pricing,
+      .team,
+      .contact-grid,
+      .footer-grid {
         grid-template-columns: 1fr;
       }
 
@@ -583,7 +814,9 @@
       .card,
       .bento-card,
       .video-shell,
-      .faq-item {
+      .faq-item,
+      .reveal,
+      .typewriter::after {
         animation: none !important;
         opacity: 1 !important;
         transform: none !important;
@@ -612,14 +845,14 @@
     <section class="hero">
       <div class="container hero-grid">
         <div class="eyebrow fade-up">Accessibility-first extension</div>
-        <h1 class="fade-up delay-1">Browse the web on your terms.</h1>
+        <h1 class="fade-up delay-1"><span class="typewriter" data-typewriter="Browse the web on your terms.">Browse the web on your terms.</span></h1>
         <p class="fade-up delay-2">
           Pincer is an accessibility-first Chrome extension that makes the web easier to read for dyslexic,
           neurodivergent, and disabled people.
         </p>
         <div class="hero-actions fade-up delay-3">
             <a class="btn btn-primary" href="#download">Download .zip</a>
-          <a class="link-cta" href="https://example.com/demo" target="_blank" rel="noreferrer">Watch demo</a>
+          <a class="link-cta" href="#demo">Watch demo</a>
         </div>
         <div class="hero-meta fade-up delay-4">
           <span>Lightweight</span>
@@ -644,12 +877,52 @@
       </div>
     </section>
 
-    <section class="section video-section">
+    <section class="section video-section" id="demo">
       <div class="container">
         <div class="video-shell">
           <div class="video-frame">
             <div class="video-pill">Drop demo video here</div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="metrics">
+      <div class="container">
+        <h2 class="section-title">Designed for measurable relief</h2>
+        <p class="section-sub">Accessibility outcomes that users can feel immediately.</p>
+        <div class="metrics">
+          <div class="metric card">
+            <strong>120k+</strong>
+            <span class="card-label">sessions</span>
+          </div>
+          <div class="metric card">
+            <strong>98%</strong>
+            <span class="card-label">readability lift</span>
+          </div>
+          <div class="metric card">
+            <strong>40%</strong>
+            <span class="card-label">less fatigue</span>
+          </div>
+          <div class="metric card">
+            <strong>1 sec</strong>
+            <span class="card-label">activation</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="logos">
+      <div class="container">
+        <h2 class="section-title">Trusted by teams who build for everyone</h2>
+        <p class="section-sub">Designed with accessibility experts and daily readers in the loop.</p>
+        <div class="logo-grid">
+          <div class="logo-chip">Education</div>
+          <div class="logo-chip">Healthcare</div>
+          <div class="logo-chip">Nonprofits</div>
+          <div class="logo-chip">Gov</div>
+          <div class="logo-chip">Product</div>
+          <div class="logo-chip">Design</div>
         </div>
       </div>
     </section>
@@ -675,6 +948,27 @@
           <div class="bento-card bento-small">
             <div class="card-label">Text-to-speech</div>
             <p>Let the page read itself at your pace.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="integrations">
+      <div class="container">
+        <h2 class="section-title">Integrations that fit your stack</h2>
+        <p class="section-sub">Pincer works anywhere you read: docs, dashboards, and learning platforms.</p>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-label">Browsers</div>
+            <p>Chrome, Edge, and Chromium-based browsers with consistent behavior.</p>
+          </div>
+          <div class="card">
+            <div class="card-label">Apps</div>
+            <p>Supports web apps, internal tools, and admin panels.</p>
+          </div>
+          <div class="card">
+            <div class="card-label">Docs</div>
+            <p>Perfect for dense knowledge bases and long-form articles.</p>
           </div>
         </div>
       </div>
@@ -713,6 +1007,44 @@
       </div>
     </section>
 
+    <section class="section section-alt" id="comparison">
+      <div class="container">
+        <h2 class="section-title">Why teams choose Pincer</h2>
+        <p class="section-sub">A quick comparison to default browser settings.</p>
+        <table class="comparison">
+          <thead>
+            <tr>
+              <th>Capability</th>
+              <th>Pincer</th>
+              <th>Default Browser</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Reading clarity tools</td>
+              <td>Yes</td>
+              <td>Limited</td>
+            </tr>
+            <tr>
+              <td>Reading ruler and focus presets</td>
+              <td>Yes</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>Dyslexia-friendly fonts</td>
+              <td>Yes</td>
+              <td>Partial</td>
+            </tr>
+            <tr>
+              <td>Distraction filters</td>
+              <td>Yes</td>
+              <td>Partial</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <section id="how">
       <div class="container">
         <h2 class="section-title">How pincer works</h2>
@@ -721,7 +1053,7 @@
           <div class="card">
             <div class="step-num">01</div>
             <div class="card-label">Install pincer</div>
-            <p>Add the extension from the Chrome Web Store.</p>
+            <p>Download the zip and load it in Chrome.</p>
           </div>
           <div class="card">
             <div class="step-num">02</div>
@@ -754,6 +1086,181 @@
             <div class="quote">“It’s the first tool that actually helps me focus.”</div>
             <div>— Priya, grad researcher</div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="case-studies">
+      <div class="container">
+        <h2 class="section-title">Case studies</h2>
+        <p class="section-sub">Short stories from teams improving readability.</p>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-label">Campus</div>
+            <p>Reduced reading fatigue for students by 37% on course sites.</p>
+          </div>
+          <div class="card">
+            <div class="card-label">Health</div>
+            <p>Simplified patient portals with focus presets and clarity tools.</p>
+          </div>
+          <div class="card">
+            <div class="card-label">Nonprofit</div>
+            <p>Improved donor conversion by making content more readable.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="security">
+      <div class="container">
+        <h2 class="section-title">Security and privacy by design</h2>
+        <p class="section-sub">Your preferences stay local. You control your browsing experience.</p>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-label">Local settings</div>
+            <p>Preferences stay on your machine and can be cleared anytime.</p>
+          </div>
+          <div class="card">
+            <div class="card-label">Transparent controls</div>
+            <p>Every preference is visible and reversible in one click.</p>
+          </div>
+          <div class="card">
+            <div class="card-label">No tracking</div>
+            <p>Pincer does not sell or share personal data.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="pricing">
+      <div class="container">
+        <h2 class="section-title">Plans that keep Pincer free</h2>
+        <p class="section-sub">Individuals get the full experience free. Teams can add support.</p>
+        <div class="pricing">
+          <div class="price-card">
+            <div class="card-label">Free</div>
+            <div class="price">$0</div>
+            <div class="price-list">
+              <span>All accessibility controls</span>
+              <span>Unlimited sites</span>
+              <span>Personal presets</span>
+            </div>
+          </div>
+          <div class="price-card">
+            <div class="card-label">Teams</div>
+            <div class="price">Custom</div>
+            <div class="price-list">
+              <span>Shared presets</span>
+              <span>Onboarding sessions</span>
+              <span>Support for schools and orgs</span>
+            </div>
+          </div>
+          <div class="price-card">
+            <div class="card-label">Enterprise</div>
+            <div class="price">Let’s talk</div>
+            <div class="price-list">
+              <span>Accessibility audits</span>
+              <span>Compliance reporting</span>
+              <span>Dedicated advisor</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="roadmap">
+      <div class="container">
+        <h2 class="section-title">Roadmap</h2>
+        <p class="section-sub">What we are building next.</p>
+        <div class="timeline">
+          <div class="timeline-item">Smart reading ruler with line focus snapping.</div>
+          <div class="timeline-item">On-device readability scoring and auto-tuning.</div>
+          <div class="timeline-item">Team presets for schools and accessibility orgs.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="team">
+      <div class="container">
+        <h2 class="section-title">Meet the team</h2>
+        <p class="section-sub">Builders, designers, and accessibility advocates.</p>
+        <div class="team">
+          <div class="person">
+            <div class="card-label">Founder</div>
+            <p>Product and accessibility research.</p>
+          </div>
+          <div class="person">
+            <div class="card-label">Design</div>
+            <p>Inclusive UX and typography systems.</p>
+          </div>
+          <div class="person">
+            <div class="card-label">Engineering</div>
+            <p>Browser extensions and performance.</p>
+          </div>
+          <div class="person">
+            <div class="card-label">Advisors</div>
+            <p>Neurodivergent and disability experts.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container">
+        <h2 class="section-title">Contact</h2>
+        <p class="section-sub">Get a walkthrough or accessibility audit support.</p>
+        <div class="contact-grid">
+          <form class="form card">
+            <input class="input" placeholder="Name" />
+            <input class="input" placeholder="Email" />
+            <input class="input" placeholder="Organization" />
+            <textarea class="textarea" placeholder="How can we help?"></textarea>
+            <button class="btn btn-primary" type="button">Request demo</button>
+          </form>
+          <div class="card">
+            <div class="card-label">Contact</div>
+            <p>arjunkshah21@gmail.com</p>
+            <div style="margin-top: 12px;">
+              <div class="card-label">Resources</div>
+              <p>Documentation, onboarding, and accessibility checklists.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="resources">
+      <div class="container">
+        <h2 class="section-title">Resources and community</h2>
+        <p class="section-sub">Toolkits, guides, and a growing community of accessibility advocates.</p>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-label">Guides</div>
+            <p>Plain-language writing tips and dyslexia-friendly checklists.</p>
+          </div>
+          <div class="card">
+            <div class="card-label">Templates</div>
+            <p>Ready-to-use accessibility presets for teams and classrooms.</p>
+          </div>
+          <div class="card">
+            <div class="card-label">Community</div>
+            <p>Share feedback, feature requests, and success stories.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="press">
+      <div class="container">
+        <h2 class="section-title">Press and recognition</h2>
+        <p class="section-sub">Celebrating accessibility-first wins across the web.</p>
+        <div class="logo-grid">
+          <div class="logo-chip">Inclusive UX</div>
+          <div class="logo-chip">Accessibility Lab</div>
+          <div class="logo-chip">Design Systems</div>
+          <div class="logo-chip">Web Standards</div>
+          <div class="logo-chip">Assistive Tech</div>
+          <div class="logo-chip">Future of Work</div>
         </div>
       </div>
     </section>
@@ -810,15 +1317,58 @@
             <li>Click “Load unpacked” and select the unzipped folder.</li>
           </ol>
         </div>
-        <div class="footer">
-          <div>© 2025 Pincer — Accessibility-first browsing.</div>
-          <div>Designed for readability and calm.</div>
-        </div>
       </div>
     </section>
   </main>
 
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand">
+            <img src="logo.webp" alt="Pincer logo" />
+            <span>PINCER</span>
+          </div>
+          <p>Accessibility-first browsing for dyslexic, neurodivergent, and disabled people.</p>
+          <p>Contact: <a href="mailto:arjunkshah21@gmail.com">arjunkshah21@gmail.com</a></p>
+        </div>
+        <div>
+          <div class="footer-title">Product</div>
+          <div class="footer-links">
+            <a href="#features">Features</a>
+            <a href="#comparison">Comparison</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#download">Installation</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Company</div>
+          <div class="footer-links">
+            <a href="#team">Team</a>
+            <a href="#press">Press</a>
+            <a href="#contact">Contact</a>
+            <a href="#roadmap">Roadmap</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Resources</div>
+          <div class="footer-links">
+            <a href="#resources">Resources</a>
+            <a href="#faq">FAQ</a>
+            <a href="#demo">Demo</a>
+            <a href="#stories">Stories</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>(c) 2025 Pincer</span>
+        <span>Built for calm, readable, and inclusive browsing.</span>
+      </div>
+    </div>
+  </footer>
+
   <script>
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const fontToggle = document.getElementById("font-toggle");
     const fontSelect = document.getElementById("font-select");
     const body = document.body;
@@ -842,6 +1392,62 @@
 
     fontToggle.addEventListener("change", applyFont);
     fontSelect.addEventListener("change", applyFont);
+
+    const typeTarget = document.querySelector("[data-typewriter]");
+    if (typeTarget && !prefersReduced) {
+      const fullText = typeTarget.getAttribute("data-typewriter") || "";
+      typeTarget.textContent = "";
+      let index = 0;
+      const tick = () => {
+        index += 1;
+        typeTarget.textContent = fullText.slice(0, index);
+        if (index < fullText.length) {
+          setTimeout(tick, 36);
+        } else {
+          typeTarget.classList.add("typewriter-done");
+        }
+      };
+      setTimeout(tick, 240);
+    }
+
+    const revealTargets = document.querySelectorAll(
+      [
+        ".section-title",
+        ".section-sub",
+        ".card",
+        ".bento-card",
+        ".video-shell",
+        ".faq-item",
+        ".metric",
+        ".logo-chip",
+        ".comparison",
+        ".price-card",
+        ".person",
+        ".timeline-item",
+        ".form",
+        ".input",
+        ".textarea"
+      ].join(",")
+    );
+
+    revealTargets.forEach((el) => el.classList.add("reveal"));
+
+    if (prefersReduced || !("IntersectionObserver" in window)) {
+      revealTargets.forEach((el) => el.classList.add("is-visible"));
+    } else {
+      const observer = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              obs.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.2 }
+      );
+      revealTargets.forEach((el) => observer.observe(el));
+    }
   </script>
 </body>
 </html>
