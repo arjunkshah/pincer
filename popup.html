@@ -26,6 +26,36 @@
 </head>
 <body>
   <div id="root"></div>
+  <div id="pincer-extras" class="pincer-extras">
+    <div class="section">
+      <div class="section-header">Reading</div>
+      <div class="section-body">
+        <div class="slider-row">
+          <div class="slider-row-top">
+            <label class="toggle-label" for="pincer-text-scale">Text Size</label>
+            <span class="slider-value" id="pincer-text-scale-value">100%</span>
+          </div>
+          <input id="pincer-text-scale" type="range" min="90" max="150" step="5" value="100" />
+        </div>
+        <div class="toggle-row">
+          <label class="toggle-label" for="pincer-reading-ruler">Reading Ruler</label>
+          <label class="toggle-switch">
+            <input id="pincer-reading-ruler" type="checkbox" />
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <label class="toggle-label" for="pincer-paragraph-focus">Paragraph Focus</label>
+          <label class="toggle-switch">
+            <input id="pincer-paragraph-focus" type="checkbox" />
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
   <script defer>
     (function () {
       function stripAiUi() {
@@ -40,7 +70,7 @@
         });
         document.querySelectorAll(".toggle-label").forEach((label) => {
           const text = label.textContent.trim();
-          if (text === "Simplify Text (AI)" || text === "Calm Mode") {
+          if (text === "Simplify Text (AI)") {
             const row = label.closest(".toggle-row");
             if (row) row.classList.add("ai-hidden");
           }
@@ -57,6 +87,70 @@
       observer.observe(document.body, { childList: true, subtree: true });
       stripAiUi();
       setTimeout(() => observer.disconnect(), 2000);
+    })();
+  </script>
+  <script defer>
+    (function () {
+      const defaults = { readingRuler: false, paragraphFocus: false, textScale: 100 };
+      const rulerToggle = document.getElementById("pincer-reading-ruler");
+      const focusToggle = document.getElementById("pincer-paragraph-focus");
+      const textScale = document.getElementById("pincer-text-scale");
+      const textScaleValue = document.getElementById("pincer-text-scale-value");
+
+      function loadPrefs(cb) {
+        if (!chrome.storage) return cb({ ...defaults });
+        chrome.storage.local.get("pincerPrefs", (data) => {
+          cb({ ...defaults, ...(data.pincerPrefs || {}) });
+        });
+      }
+
+      function sendPrefs(prefs) {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          const tab = tabs && tabs[0];
+          if (!tab) return;
+          chrome.tabs.sendMessage(tab.id, { type: "PREFS_UPDATED", prefs }, () => {
+            if (!chrome.runtime.lastError) return;
+            if (!chrome.scripting) return;
+            chrome.scripting.insertCSS({ target: { tabId: tab.id }, files: ["visual.css"] }, () => {
+              chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ["content.js"] }, () => {
+                chrome.tabs.sendMessage(tab.id, { type: "PREFS_UPDATED", prefs }, () => {
+                  chrome.runtime.lastError;
+                });
+              });
+            });
+          });
+        });
+      }
+
+      function updatePref(key, value) {
+        loadPrefs((prefs) => {
+          const next = { ...prefs, [key]: value };
+          if (chrome.storage) chrome.storage.local.set({ pincerPrefs: next });
+          sendPrefs(next);
+        });
+      }
+
+      loadPrefs((prefs) => {
+        if (rulerToggle) rulerToggle.checked = !!prefs.readingRuler;
+        if (focusToggle) focusToggle.checked = !!prefs.paragraphFocus;
+        if (textScale) textScale.value = prefs.textScale || 100;
+        if (textScaleValue) textScaleValue.textContent = `${prefs.textScale || 100}%`;
+      });
+
+      if (rulerToggle) {
+        rulerToggle.addEventListener("change", (e) => updatePref("readingRuler", e.target.checked));
+      }
+
+      if (focusToggle) {
+        focusToggle.addEventListener("change", (e) => updatePref("paragraphFocus", e.target.checked));
+      }
+
+      if (textScale) {
+        textScale.addEventListener("input", (e) => {
+          textScaleValue.textContent = `${e.target.value}%`;
+        });
+        textScale.addEventListener("change", (e) => updatePref("textScale", Number(e.target.value)));
+      }
     })();
   </script>
 </body>

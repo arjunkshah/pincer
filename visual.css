@@ -132,3 +132,38 @@ html[data-pincer-color="midnight"] body *:not(img):not(video):not(svg):not(canva
 html[data-pincer-color="midnight"] a {
   color: #f59e0b !important;
 }
+
+/* Calm mode — soften urgent banners */
+html[data-pincer-calm] [data-pincer-calmed] {
+  background: #f6f6f6 !important;
+  color: #111111 !important;
+  border-left: 3px solid #bdbdbd !important;
+  border-radius: 2px !important;
+  box-shadow: none !important;
+  text-transform: none !important;
+  padding: 8px 12px !important;
+}
+
+html[data-pincer-calm] [data-pincer-calmed] * {
+  color: inherit !important;
+}
+
+/* Reading ruler */
+#pincer-reading-ruler {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 64px;
+  background: rgba(215, 38, 56, 0.06);
+  border-top: 1px solid rgba(215, 38, 56, 0.3);
+  border-bottom: 1px solid rgba(215, 38, 56, 0.3);
+  pointer-events: none;
+  z-index: 2147483646;
+  transform: translateY(-50%);
+}
+
+/* Paragraph focus */
+.pincer-focus-target {
+  background: rgba(215, 38, 56, 0.08) !important;
+  box-shadow: inset 0 0 0 1px rgba(215, 38, 56, 0.3) !important;
+}
