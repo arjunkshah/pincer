@@ -725,6 +725,25 @@
       gap: 12px 18px;
     }
 
+    .video-frame {
+      border: 1px dashed #cfcfcf;
+      border-radius: var(--radius);
+      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      padding: 12px;
+    }
+
+    .demo-embed {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #f5f5f5;
+    }
+
     .quote {
       border-left: 2px solid var(--accent);
       padding-left: 12px;
@@ -836,8 +855,8 @@
         <a href="#how">How it works</a>
         <a href="#stories">Stories</a>
         <a href="#faq">FAQ</a>
+        <a href="https://github.com/arjunkshah/pincer" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
-      <a class="btn btn-primary" href="#download">Download .zip</a>
     </div>
   </header>
 
@@ -881,7 +900,14 @@
       <div class="container">
         <div class="video-shell">
           <div class="video-frame">
-            <div class="video-pill">Drop demo video here</div>
+            <iframe
+              class="demo-embed"
+              src="https://www.loom.com/embed/5d4359045bc24b6b86f7e01ff5206374"
+              title="Pincer demo by Arjun Shah"
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen>
+            </iframe>
           </div>
         </div>
       </div>
